@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Pote de Mel com Animação</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Pacifico&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: url('/fundo.jpg') no-repeat center center;
+      background-size: cover;
+      height: 100vh;
+      margin: 0;
+      font-family: "Pacifico", cursive;
+      font-weight: 400;
+      color: #333;
+      overflow: hidden;
+    }
+
+    .jar-container {
+      animation: shakeJar 1s ease-in-out infinite;
+      cursor: pointer;
+    }
+
+    @keyframes shakeJar {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-5deg); }
+      50% { transform: rotate(5deg); }
+      75% { transform: rotate(-5deg); }
+    }
+
+    .reveal-text {
+      font-optical-sizing: auto;
+      font-weight: 700;
+      position: absolute;
+      bottom: 100px;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      font-size: 84px;
+      width: 100%;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-30px);
+      }
+      60% {
+        transform: translateY(-15px);
+      }
+    }
+
+    .bounce {
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes fadeInScale {
+      0% {
+        opacity: 0;
+        transform: scale(0.5);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .fade-in {
+      animation: fadeInScale 1s ease-out forwards;
+    }
+
+    .smoke {
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      opacity: 0.7;
+      filter: blur(30px);
+      animation: rise 4s ease-out forwards;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: -1;
+    }
+
+    .smoke.blue {
+      background: rgba(100, 150, 255, 0.6);
+    }
+
+    .smoke.pink {
+      background: rgba(255, 150, 200, 0.6);
+    }
+
+    @keyframes rise {
+      0% {
+        bottom: 100px;
+        transform: translateX(-50%) scale(0.5);
+        opacity: 0.9;
+      }
+      100% {
+        bottom: 500px;
+        transform: translateX(-50%) scale(1.5);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Canvas de confete -->
+  <canvas id="confettiCanvas" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none;"></canvas>
+
+  <div style="display: flex; flex-direction: column; align-items: center; justify-content: space-between; text-align:center; height: 50vh; padding: 64px;">
+    <span style="font-size: 64px;">
+      Olá família e amigos, estou chegando! Vamos descobrir meu nomezinho clicando no pote de mel?
+    </span>
+
+    <div class="jar-container" onclick="revelar()">
+      <img style="width: 200px;" src="/clipart2385957.png" alt="Pote de Mel">
+    </div>
+  </div>
+
+  <div id="revealText" class="reveal-text">
+    <span id="nomeBebe">Otto / Antonella</span>
+  </div>
+
+  <!-- Música fofinha -->
+  <audio id="musica" src="/song.mp3" preload="auto" autoplay></audio>
+
+  <script>
+    function revelar() {
+      const revealText = document.getElementById('revealText');
+      const nomeBebe = document.getElementById('nomeBebe');
+      const musica = document.getElementById('musica');
+
+      // Toca a música automaticamente quando o nome for revelado
+      musica.play();
+
+      // Exibe o nome com fade-in e depois bounce infinito
+      revealText.style.display = 'flex';
+      nomeBebe.classList.remove('bounce');
+      nomeBebe.classList.add('fade-in');
+
+      // Após a animação de entrada, adiciona o bounce infinito
+      setTimeout(() => {
+        nomeBebe.classList.remove('fade-in');
+        nomeBebe.classList.add('bounce');
+      }, 1000); // tempo da animação fade-in
+
+      // Fumaça azul ou rosa
+      const cor = Math.random() < 0.5 ? 'blue' : 'pink';
+      const smoke = document.createElement('div');
+      smoke.classList.add('smoke', cor);
+      document.body.appendChild(smoke);
+
+      // Confete
+      confetti();
+    }
+
+    function confetti() {
+      const canvas = document.getElementById("confettiCanvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      let pieces = [];
+      for (let i = 0; i < 200; i++) {
+        pieces.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height - canvas.height,
+          radius: Math.random() * 6 + 4,
+          color: `hsl(${Math.random() * 360}, 100%, 60%)`,
+          speed: Math.random() * 3 + 2,
+          angle: Math.random() * 2 * Math.PI,
+          spin: Math.random() * 0.1 - 0.05
+        });
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        pieces.forEach(p => {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.fill();
+        });
+      }
+
+      function update() {
+        pieces.forEach(p => {
+          p.y += p.speed;
+          p.x += Math.sin(p.angle) * 2;
+          p.angle += p.spin;
+        });
+      }
+
+      function loop() {
+        draw();
+        update();
+        requestAnimationFrame(loop);
+      }
+
+      loop();
+    }
+  </script>
+</body>
+</html>
