@@ -109,7 +109,6 @@
   </style>
 </head>
 <body>
-  <!-- Canvas de confete -->
   <canvas id="confettiCanvas" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none;"></canvas>
 
   <div style="display: flex; flex-direction: column; align-items: center; justify-content: space-between; text-align:center; height: 50vh; padding: 64px;">
@@ -126,7 +125,6 @@
     <span id="nomeBebe">Otto / Antonella</span>
   </div>
 
-  <!-- Música fofinha -->
   <audio id="musica" src="song.mp3" preload="auto" autoplay></audio>
 
   <script>
@@ -135,27 +133,22 @@
       const nomeBebe = document.getElementById('nomeBebe');
       const musica = document.getElementById('musica');
 
-      // Toca a música automaticamente quando o nome for revelado
       musica.play();
 
-      // Exibe o nome com fade-in e depois bounce infinito
       revealText.style.display = 'flex';
       nomeBebe.classList.remove('bounce');
       nomeBebe.classList.add('fade-in');
 
-      // Após a animação de entrada, adiciona o bounce infinito
       setTimeout(() => {
         nomeBebe.classList.remove('fade-in');
         nomeBebe.classList.add('bounce');
-      }, 1000); // tempo da animação fade-in
+      }, 1000); 
 
-      // Fumaça azul ou rosa
       const cor = Math.random() < 0.5 ? 'blue' : 'pink';
       const smoke = document.createElement('div');
       smoke.classList.add('smoke', cor);
       document.body.appendChild(smoke);
 
-      // Confete
       confetti();
     }
 
