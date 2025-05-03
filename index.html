@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Revelação do nosso baby</title>
+  <title>Pote de Mel com Animação</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Pacifico&display=swap" rel="stylesheet">
@@ -111,8 +111,12 @@
       Olá família e amigos, estou chegando! Vamos descobrir meu nomezinho clicando no pote de mel?
     </span>
 
-    <div class="jar-container" onclick="revelar()">
+    <div class="jar-container" onclick="iniciarContagem()">
       <img style="width: 200px;" src="pote.png" alt="Pote de Mel">
+    </div>
+
+    <div>
+      <span id="contador" style="font-size: 64px; display: none;"></span>
     </div>
 
     <div>
@@ -123,6 +127,28 @@
   <audio id="musica" src="song.mp3" preload="auto"></audio>
 
   <script>
+    function iniciarContagem() {
+      const contador = document.getElementById('contador');
+      const pote = document.querySelector('.jar-container');
+
+      // Evita múltiplos cliques
+      pote.onclick = null;
+
+      let numeros = [3, 2, 1];
+      contador.style.display = 'block';
+
+      numeros.forEach((num, index) => {
+        setTimeout(() => {
+          contador.textContent = num;
+        }, index * 1000);
+      });
+
+      setTimeout(() => {
+        contador.style.display = 'none';
+        revelar();
+      }, numeros.length * 1000);
+    }
+
     function revelar() {
       const nomeBebe = document.getElementById('nomeBebe');
       const musica = document.getElementById('musica');
@@ -197,7 +223,7 @@
       loop();
     }
 
-    // Interrompe a música se o usuário sair da aba ou minimizar
+    // Pausa a música se a aba for escondida
     document.addEventListener("visibilitychange", function () {
       const musica = document.getElementById("musica");
       if (document.hidden && !musica.paused) {
@@ -206,7 +232,7 @@
       }
     });
 
-    // Interrompe a música se a aba for fechada (quando possível)
+    // Pausa a música se a aba for fechada
     window.addEventListener("beforeunload", function () {
       const musica = document.getElementById("musica");
       if (!musica.paused) {
