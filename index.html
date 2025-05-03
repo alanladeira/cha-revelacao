@@ -33,8 +33,6 @@
     .reveal-text {
       font-optical-sizing: auto;
       font-weight: 700;
-      position: absolute;
-      bottom: 20px;
       display: none;
       justify-content: center;
       align-items: center;
@@ -74,16 +72,15 @@
     }
 
     .smoke {
-      position: absolute;
+      position: absolute; /* Alterei para absolute */
       width: 200px;
       height: 200px;
       border-radius: 50%;
       opacity: 0.7;
       filter: blur(30px);
       animation: rise 4s ease-out forwards;
-      left: 50%;
-      transform: translateX(-50%);
       z-index: -1;
+      transform: translateX(-50%);
     }
 
     .smoke.blue {
@@ -96,12 +93,10 @@
 
     @keyframes rise {
       0% {
-        bottom: 100px;
         transform: translateX(-50%) scale(0.5);
         opacity: 0.9;
       }
       100% {
-        bottom: 500px;
         transform: translateX(-50%) scale(1.5);
         opacity: 0;
       }
@@ -111,7 +106,7 @@
 <body>
   <canvas id="confettiCanvas" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none;"></canvas>
 
-  <div style="display: flex; flex-direction: column; align-items: center; justify-content: space-between; text-align:center; height: 50vh; padding: 64px;">
+  <div style="display: flex; flex-direction: column; align-items: center; justify-content: space-between; text-align:center; height: 63vh; padding: 64px;">
     <span style="font-size: 64px;">
       Olá família e amigos, estou chegando! Vamos descobrir meu nomezinho clicando no pote de mel?
     </span>
@@ -119,23 +114,22 @@
     <div class="jar-container" onclick="revelar()">
       <img style="width: 200px;" src="pote.png" alt="Pote de Mel">
     </div>
-  </div>
 
-  <div id="revealText" class="reveal-text">
-    <span id="nomeBebe">Otto / Antonella</span>
+    <div>
+      <span id="nomeBebe" class="reveal-text">Otto / Antonella</span>
+    </div>
   </div>
 
   <audio id="musica" src="song.mp3" preload="auto" autoplay></audio>
 
   <script>
     function revelar() {
-      const revealText = document.getElementById('revealText');
       const nomeBebe = document.getElementById('nomeBebe');
       const musica = document.getElementById('musica');
 
       musica.play();
 
-      revealText.style.display = 'flex';
+      nomeBebe.style.display = 'flex';
       nomeBebe.classList.remove('bounce');
       nomeBebe.classList.add('fade-in');
 
@@ -144,9 +138,18 @@
         nomeBebe.classList.add('bounce');
       }, 1000); 
 
+      // Cria a fumaça na posição da div do nome do bebê
       const cor = Math.random() < 0.5 ? 'blue' : 'pink';
       const smoke = document.createElement('div');
       smoke.classList.add('smoke', cor);
+
+      // Obtém a posição da div do nome
+      const nomeRect = nomeBebe.getBoundingClientRect();
+      
+      // Calcula a posição do smoke em relação à div
+      smoke.style.left = `${nomeRect.left + nomeRect.width / 2}px`;
+      smoke.style.top = `${nomeRect.top - 100}px`; // Ajuste para ficar acima do nome
+
       document.body.appendChild(smoke);
 
       confetti();
