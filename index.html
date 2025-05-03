@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Revelação do nosso baby</title>
+  <title>Pote de Mel com Animação</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Pacifico&display=swap" rel="stylesheet">
@@ -72,7 +72,7 @@
     }
 
     .smoke {
-      position: absolute; /* Alterei para absolute */
+      position: absolute;
       width: 200px;
       height: 200px;
       border-radius: 50%;
@@ -120,7 +120,7 @@
     </div>
   </div>
 
-  <audio id="musica" src="song.mp3" preload="auto" autoplay></audio>
+  <audio id="musica" src="song.mp3" preload="auto"></audio>
 
   <script>
     function revelar() {
@@ -138,17 +138,13 @@
         nomeBebe.classList.add('bounce');
       }, 1000); 
 
-      // Cria a fumaça na posição da div do nome do bebê
       const cor = Math.random() < 0.5 ? 'blue' : 'pink';
       const smoke = document.createElement('div');
       smoke.classList.add('smoke', cor);
 
-      // Obtém a posição da div do nome
       const nomeRect = nomeBebe.getBoundingClientRect();
-      
-      // Calcula a posição do smoke em relação à div
       smoke.style.left = `${nomeRect.left + nomeRect.width / 2}px`;
-      smoke.style.top = `${nomeRect.top - 100}px`; // Ajuste para ficar acima do nome
+      smoke.style.top = `${nomeRect.top - 100}px`;
 
       document.body.appendChild(smoke);
 
@@ -200,6 +196,24 @@
 
       loop();
     }
+
+    // Interrompe a música se o usuário sair da aba ou minimizar
+    document.addEventListener("visibilitychange", function () {
+      const musica = document.getElementById("musica");
+      if (document.hidden && !musica.paused) {
+        musica.pause();
+        musica.currentTime = 0;
+      }
+    });
+
+    // Interrompe a música se a aba for fechada (quando possível)
+    window.addEventListener("beforeunload", function () {
+      const musica = document.getElementById("musica");
+      if (!musica.paused) {
+        musica.pause();
+        musica.currentTime = 0;
+      }
+    });
   </script>
 </body>
 </html>
