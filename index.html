@@ -2,12 +2,25 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Revelação do nosso baby</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Pacifico&display=swap" rel="stylesheet">
   <style>
     body {
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      justify-content: center;
+      margin: 0;
+      font-family: "Pacifico", cursive;
+      font-weight: 400;
+      color: #333;
+      overflow: hidden;
+    }
+
+    .my-content {
       background: url('fundo.jpg') no-repeat center center;
       background-size: cover;
       height: 100vh;
@@ -16,11 +29,36 @@
       font-weight: 400;
       color: #333;
       overflow: hidden;
+      padding: 32px;
+
+      @media (min-width: 624px) {
+        width: 624px;
+      }
+    }
+
+    .title {
+      font-size: 20px;
+      font-weight: 700;
+      text-align: center;
+
+      @media (min-width: 624px) {
+        font-size: 32px;
+      }
     }
 
     .jar-container {
       animation: shakeJar 1s ease-in-out infinite;
       cursor: pointer;
+
+    
+    }
+
+    .jar-container img {
+      width:  92px;
+
+      @media (min-width: 624px) {
+        width: 132px;
+      }
     }
 
     @keyframes shakeJar {
@@ -36,8 +74,13 @@
       display: none;
       justify-content: center;
       align-items: center;
-      font-size: 84px;
+      font-size: 34px;
       width: 100%;
+
+      @media (min-width: 624px) {
+        font-size: 64px;
+        
+      }
     }
 
     @keyframes bounce {
@@ -104,25 +147,28 @@
   </style>
 </head>
 <body>
-  <canvas id="confettiCanvas" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none;"></canvas>
+  <div class="my-content">
+    <canvas id="confettiCanvas" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none;"></canvas>
 
-  <div style="display: flex; flex-direction: column; align-items: center; justify-content: space-between; text-align:center; height: 63vh; padding: 64px;">
-    <span style="font-size: 64px;">
-      Olá família e amigos, estou chegando! Vamos descobrir meu nomezinho clicando no pote de mel?
-    </span>
-
-    <div class="jar-container" onclick="iniciarContagem()">
-      <img style="width: 200px;" src="pote.png" alt="Pote de Mel">
-    </div>
-
-    <div>
-      <span id="contador" style="font-size: 64px; display: none;"></span>
-    </div>
-
-    <div>
-      <span id="nomeBebe" class="reveal-text">Otto / Antonella</span>
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: space-between; text-align:center; height: 63vh;">
+      <span class="title">
+        Olá família e amigos, estou chegando! Vamos descobrir meu nomezinho clicando no pote de mel?
+      </span>
+  
+      <div class="jar-container" onclick="iniciarContagem()">
+        <img src="pote.png" alt="Pote de Mel">
+      </div>
+  
+      <div>
+        <span id="contador" style="font-size: 64px; display: none;"></span>
+      </div>
+  
+      <div>
+        <span id="nomeBebe" class="reveal-text">Otto / Antonella</span>
+      </div>
     </div>
   </div>
+  
 
   <audio id="musica" src="song.mp3" preload="auto"></audio>
 
